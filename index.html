@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HabitFlow Pro</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<!-- ========================= -->
+<!-- LOADER -->
+<!-- ========================= -->
+
+<div class="loader-screen" id="loader">
+    <div class="loader"></div>
+</div>
+
+<!-- ========================= -->
+<!-- TOAST -->
+<!-- ========================= -->
+
+<div id="toast-container"></div>
+
+<!-- ========================= -->
+<!-- APP WRAPPER -->
+<!-- ========================= -->
+
+<div class="app">
+
+    <!-- ========================= -->
+    <!-- SIDEBAR -->
+    <!-- ========================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h2>HabitFlow</h2>
+            <span>Premium Tracker</span>
+        </div>
+
+        <nav>
+
+            <button class="nav-link active" data-section="dashboard">
+                Dashboard
+            </button>
+
+            <button class="nav-link" data-section="habits">
+                Habits
+            </button>
+
+            <button class="nav-link" data-section="calendar">
+                Calendar
+            </button>
+
+            <button class="nav-link" data-section="goals">
+                Goals
+            </button>
+
+            <button class="nav-link" data-section="journal">
+                Journal
+            </button>
+
+            <button class="nav-link" data-section="analytics">
+                Analytics
+            </button>
+
+        </nav>
+
+        <div class="sidebar-footer">
+
+            <button id="themeToggle">
+                🌙 Theme
+            </button>
+
+        </div>
+
+    </aside>
+
+    <!-- ========================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ========================= -->
+
+    <main class="main-content">
+
+        <!-- ========================= -->
+        <!-- HEADER -->
+        <!-- ========================= -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>Habit Tracker Dashboard</h1>
+
+                <p>
+                    Build consistency. Track progress. Improve daily.
+                </p>
+
+            </div>
+
+            <div class="top-actions">
+
+                <button id="addHabitBtn" class="primary-btn">
+                    + Habit
+                </button>
+
+                <button id="addGoalBtn" class="secondary-btn">
+                    + Goal
+                </button>
+
+            </div>
+
+        </header>
+
+        <!-- ========================= -->
+        <!-- DASHBOARD -->
+        <!-- ========================= -->
+
+        <section id="dashboard" class="page-section active">
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <h4>Current Streak</h4>
+                    <h2 id="currentStreak">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <h4>Longest Streak</h4>
+                    <h2 id="longestStreak">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <h4>Completion Rate</h4>
+                    <h2 id="completionRate">0%</h2>
+                </div>
+
+                <div class="stat-card">
+                    <h4>Total Completed</h4>
+                    <h2 id="totalCompleted">0</h2>
+                </div>
+
+            </div>
+
+            <div class="dashboard-grid">
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <h3>Monthly Overview</h3>
+                    </div>
+
+                    <canvas id="monthlyChart"></canvas>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <h3>Consistency</h3>
+                    </div>
+
+                    <canvas id="weeklyChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================= -->
+        <!-- HABITS -->
+        <!-- ========================= -->
+
+        <section id="habits" class="page-section">
+
+            <div class="section-header">
+
+                <h2>Daily Habits</h2>
+
+            </div>
+
+            <div class="card">
+
+                <div id="habitList">
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================= -->
+        <!-- CALENDAR -->
+        <!-- ========================= -->
+
+        <section id="calendar" class="page-section">
+
+            <div class="calendar-controls">
+
+                <button id="prevMonth">
+                    ◀
+                </button>
+
+                <h2 id="currentMonth">
+                    June 2026
+                </h2>
+
+                <button id="nextMonth">
+                    ▶
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <div id="calendarGrid" class="calendar-grid">
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================= -->
+        <!-- GOALS -->
+        <!-- ========================= -->
+
+        <section id="goals" class="page-section">
+
+            <div class="goal-wrapper">
+
+                <!-- MONTHLY -->
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <h3>Monthly Goals</h3>
+
+                    </div>
+
+                    <div id="monthlyGoals">
+
+                    </div>
+
+                </div>
+
+                <!-- WEEKLY -->
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <h3>Weekly Goals</h3>
+
+                    </div>
+
+                    <div id="weeklyGoals">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================= -->
+        <!-- JOURNAL -->
+        <!-- ========================= -->
+
+        <section id="journal" class="page-section">
+
+            <div class="card journal-card">
+
+                <div class="card-header">
+
+                    <h3>Daily Journal</h3>
+
+                </div>
+
+                <input
+                    type="date"
+                    id="journalDate"
+                >
+
+                <textarea
+                    id="journalEntry"
+                    placeholder="Write your reflections..."
+                ></textarea>
+
+                <button
+                    class="primary-btn"
+                    id="saveJournal"
+                >
+                    Save Entry
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- ========================= -->
+        <!-- ANALYTICS -->
+        <!-- ========================= -->
+
+        <section id="analytics" class="page-section">
+
+            <div class="analytics-grid">
+
+                <div class="card">
+
+                    <h3>Habit Completion Trend</h3>
+
+                    <canvas id="trendChart"></canvas>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>Performance Analytics</h3>
+
+                    <canvas id="performanceChart"></canvas>
+
+                </div>
+
+                <div class="card analytics-summary">
+
+                    <h3>Insights</h3>
+
+                    <div id="analyticsSummary"></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<!-- ========================= -->
+<!-- HABIT MODAL -->
+<!-- ========================= -->
+
+<div class="modal" id="habitModal">
+
+    <div class="modal-content">
+
+        <h2>Add Habit</h2>
+
+        <input
+            type="text"
+            id="habitName"
+            placeholder="Habit Name"
+        >
+
+        <button
+            class="primary-btn"
+            id="saveHabit"
+        >
+            Save Habit
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ========================= -->
+<!-- GOAL MODAL -->
+<!-- ========================= -->
+
+<div class="modal" id="goalModal">
+
+    <div class="modal-content">
+
+        <h2>Add Goal</h2>
+
+        <input
+            type="text"
+            id="goalName"
+            placeholder="Goal"
+        >
+
+        <select id="goalType">
+
+            <option value="monthly">
+                Monthly Goal
+            </option>
+
+            <option value="weekly">
+                Weekly Goal
+            </option>
+
+        </select>
+
+        <button
+            class="primary-btn"
+            id="saveGoal"
+        >
+            Save Goal
+        </button>
+
+    </div>
+
+</div>
+<footer class="app-footer">
+
+    <div class="footer-badge">
+        ⚡ Developed by Daku
+    </div>
+
+</footer>
+<script src="script.js"></script>
+
+</body>
+</html>
